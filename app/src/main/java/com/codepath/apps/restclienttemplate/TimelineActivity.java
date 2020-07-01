@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +30,7 @@ import okhttp3.Headers;
 public class TimelineActivity extends AppCompatActivity {
 
     public static final String TAG = "TimelineActivity";
+    private final int REQUEST_CODE = 20;
     TwitterClient client;
     RecyclerView rvTweets;
     List<Tweet> tweets;
@@ -72,9 +74,19 @@ public class TimelineActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.compose){
 //          Toast.makeText(this, "Toast!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ComposeActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
+            return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void fetchTimelineASync(int page) {
