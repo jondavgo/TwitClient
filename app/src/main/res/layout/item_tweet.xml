@@ -43,5 +43,5 @@
         android:layout_marginBottom="2dp"
         android:layout_toEndOf="@+id/tvScreenName"
         android:gravity="end"
-        tools:text="3 min." />
+        tools:text="3 min. ago" />
 </RelativeLayout>
