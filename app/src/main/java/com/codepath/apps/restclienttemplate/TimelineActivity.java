@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.TwitterApplication;
 import com.codepath.apps.restclienttemplate.TwitterClient;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -42,13 +43,14 @@ public class TimelineActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timeline);
+        ActivityTimelineBinding binding = ActivityTimelineBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         client = TwitterApplication.getRestClient(this);
         populateHomeTimeline();
-        rvTweets = findViewById(R.id.rvTweets);
+        rvTweets = binding.rvTweets;
         tweets = new ArrayList<>();
-        adapter = new TweetsAdapter(getApplicationContext(), tweets);
+        adapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         rvTweets.setLayoutManager(layoutManager);
@@ -59,7 +61,6 @@ public class TimelineActivity extends AppCompatActivity {
                 fetchTimelineASync(0);
             }
         });
-        // TODO: Update refresh colors to match design
         swipeContainer.setColorSchemeResources(R.color.twitter_blue,
                 R.color.medium_green,
                 R.color.medium_gray_50,

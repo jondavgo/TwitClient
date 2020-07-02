@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.codepath.apps.restclienttemplate.databinding.ActivityComposeBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -30,9 +31,10 @@ public class ComposeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compose);
-        etCompose = findViewById(R.id.etCompose);
-        buttonTweet = findViewById(R.id.buttonTweet);
+        ActivityComposeBinding binding = ActivityComposeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        etCompose = binding.etCompose;
+        buttonTweet = binding.buttonTweet;
         client = TwitterApplication.getRestClient(this);
         buttonTweet.setOnClickListener(new View.OnClickListener() {
             @Override
