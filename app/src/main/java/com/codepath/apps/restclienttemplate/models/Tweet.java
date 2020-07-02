@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,18 +16,24 @@ public class Tweet {
     public String createdAt;
     public User user;
     public String time;
+    public String embedURL;
 
     // Needed for Parceler
     public Tweet(){
 
     }
 
-    public static Tweet fromJson(JSONObject object) throws JSONException {
+    public static Tweet fromJson(JSONObject object) {
         Tweet tweet = new Tweet();
-        tweet.body = object.getString("text");
-        tweet.createdAt = object.getString("created_at");
-        tweet.user = User.fromJson(object.getJSONObject("user"));
-        tweet.time = object.getString("created_at");
+        try {
+            tweet.body = object.getString("text");
+            tweet.createdAt = object.getString("created_at");
+            tweet.user = User.fromJson(object.getJSONObject("user"));
+            tweet.time = object.getString("created_at");
+            tweet.embedURL = object.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url_https");
+        } catch(Exception e){
+            Log.i("Tweet.fromJson", "JSONException", e);
+        }
         return tweet;
     }
 

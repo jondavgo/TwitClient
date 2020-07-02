@@ -4,6 +4,7 @@ import android.content.Context;
 import android.icu.text.SimpleDateFormat;
 import android.os.Build;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView ivProfileImage;
+        ImageView ivEmbed;
         TextView tvBody;
         TextView tvScreenName;
         TextView tvTime;
@@ -93,6 +95,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvBody = itemView.findViewById(R.id.tvBody);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvTime = itemView.findViewById(R.id.tvTime);
+            ivEmbed = itemView.findViewById(R.id.ivEmbed);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.N)
@@ -103,6 +106,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             Glide.with(context)
                     .load(tweet.user.imageURL)
                     .into(ivProfileImage);
+            if(tweet.embedURL != null){
+                Glide.with(context)
+                        .load(tweet.embedURL)
+                        .into(ivEmbed);
+                Log.i("Adapter", "image posted!");
+            } else {
+                ivEmbed.setVisibility(View.GONE);
+            }
         }
     }
 }

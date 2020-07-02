@@ -44,4 +44,12 @@
         android:layout_toEndOf="@+id/tvScreenName"
         android:gravity="end"
         tools:text="3 min. ago" />
+
+    <ImageView
+        android:id="@+id/ivEmbed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBody"
+        android:layout_marginTop="10dp"
+        tools:srcCompat="@tools:sample/avatars" />
 </RelativeLayout>
