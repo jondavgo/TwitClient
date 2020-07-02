@@ -16,6 +16,8 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import java.text.ParseException;
@@ -88,6 +90,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvBody;
         TextView tvScreenName;
         TextView tvTime;
+        View view;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -96,6 +99,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
             tvTime = itemView.findViewById(R.id.tvTime);
             ivEmbed = itemView.findViewById(R.id.ivEmbed);
+            view = itemView;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.N)
@@ -105,15 +109,23 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvTime.setText(getRelativeTimeAgo(tweet.time));
             Glide.with(context)
                     .load(tweet.user.imageURL)
+                    .transform(new CircleCrop())
                     .into(ivProfileImage);
-            if(tweet.embedURL != null){
+            if(!tweet.embedURL.equals("")){
+                ivEmbed.setVisibility(View.VISIBLE);
                 Glide.with(context)
                         .load(tweet.embedURL)
+                        .transform(new RoundedCorners(30))
                         .into(ivEmbed);
-                Log.i("Adapter", "image posted!");
             } else {
                 ivEmbed.setVisibility(View.GONE);
             }
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
     }
 }

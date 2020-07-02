@@ -30,7 +30,11 @@ public class Tweet {
             tweet.createdAt = object.getString("created_at");
             tweet.user = User.fromJson(object.getJSONObject("user"));
             tweet.time = object.getString("created_at");
-            tweet.embedURL = object.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url_https");
+            if(object.getJSONObject("entities").has("media")) {
+                tweet.embedURL = object.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url_https");
+            } else {
+                tweet.embedURL = "";
+            }
         } catch(Exception e){
             Log.i("Tweet.fromJson", "JSONException", e);
         }
