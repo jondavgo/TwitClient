@@ -2,6 +2,8 @@ package com.codepath.apps.restclienttemplate.models;
 
 import android.util.Log;
 
+import com.codepath.apps.restclienttemplate.TwitterClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +19,7 @@ public class Tweet {
     public User user;
     public String time;
     public String embedURL;
+    public long id;
 
     // Needed for Parceler
     public Tweet(){
@@ -35,6 +38,7 @@ public class Tweet {
             } else {
                 tweet.embedURL = "";
             }
+            tweet.id = object.getLong("id");
         } catch(Exception e){
             Log.i("Tweet.fromJson", "JSONException", e);
         }
