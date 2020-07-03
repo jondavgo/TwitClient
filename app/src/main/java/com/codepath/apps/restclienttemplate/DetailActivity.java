@@ -36,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvScreenName;
     TextView tvTime;
     ImageView ivHeart;
+    ImageView ivRT;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -51,6 +52,7 @@ public class DetailActivity extends AppCompatActivity {
         tvTime = binding.tvTime;
         ivEmbed = binding.ivEmbed;
         ivHeart = binding.ivLike;
+        ivRT = binding.ivRT;
         tvBody.setText(tweet.body);
         tvScreenName.setText(tweet.user.name);
         tvTime.setText(TweetsAdapter.getRelativeTimeAgo(tweet.time));
@@ -67,7 +69,6 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             ivEmbed.setVisibility(View.GONE);
         }
-
         client.checkStatus(tweet.id, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -77,6 +78,7 @@ public class DetailActivity extends AppCompatActivity {
                     retweeted = object.getBoolean("retweeted");
                     Log.i("Details", "Success! Liked: " + liked + " Retweeted: " + retweeted);
                     fixHeart();
+                    fixRT();
                 } catch (JSONException e) {
                     Log.e("Details", "JSON Exception", e);
                 }
@@ -106,6 +108,24 @@ public class DetailActivity extends AppCompatActivity {
                 fixHeart();
             }
         });
+        ivRT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                client.Retweet(retweeted, tweet.id, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Headers headers, JSON json) {
+                        Log.i("Details", "Retweeted!");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                        Log.e("Details", "Not Retweeted!");
+                    }
+                });
+                retweeted = !retweeted;
+                fixRT();
+            }
+        });
     }
 
     private void fixHeart(){
@@ -113,6 +133,14 @@ public class DetailActivity extends AppCompatActivity {
             Glide.with(this).load(R.drawable.ic_vector_heart).into(ivHeart);
         } else {
             Glide.with(this).load(R.drawable.ic_vector_heart_stroke).into(ivHeart);
+        }
+    }
+
+    private void fixRT(){
+        if(retweeted){
+            Glide.with(this).load(R.drawable.ic_vector_retweet).into(ivRT);
+        } else {
+            Glide.with(this).load(R.drawable.ic_vector_retweet_stroke).into(ivRT);
         }
     }
 }
