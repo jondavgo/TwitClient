@@ -2,7 +2,7 @@
 
 **TwitClient** is an android app that allows a user to view their Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
 
-Time spent: **10.5** hours spent in total
+Time spent: **12.5** hours spent in total
 
 ## User Stories
 
@@ -54,7 +54,7 @@ GIF created with [Kap](http://getkap.co).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Twitter's built-in response time limit was the bane of this project, making testing much more difficult than it needed to be. I needed to use my own twitter, an alternate account, and two throw aways just to make the video tutorial work properly. Other than that, the app came along smoothly. It was simply a matter of knowing when I needed assistance.
 
 ## Open-source libraries used
 
