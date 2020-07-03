@@ -49,6 +49,7 @@ Here's a walkthrough of implemented user stories:
 <img src='https://github.com/jondavgo/TwitClient/blob/master/LogIn.gif' title='Logging In' width='' alt='Logging In' />
 
 <img src='https://github.com/jondavgo/TwitClient/blob/master/Tutorial.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/jondavgo/TwitClient/blob/master/PullRefPersist.gif' title='Pull-Refresh and Persistence' width='' alt='Pull-Refresh and Persistence' />
 
 GIF created with [Kap](http://getkap.co).
 
