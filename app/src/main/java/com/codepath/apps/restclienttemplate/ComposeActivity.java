@@ -53,7 +53,12 @@ public class ComposeActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
                         Log.i(TAG, "Tweet posted!");
-                        Tweet tweet = Tweet.fromJson(json.jsonObject);
+                        Tweet tweet = null;
+                        try {
+                            tweet = Tweet.fromJson(json.jsonObject);
+                        } catch (JSONException e) {
+                            Log.e("Compose", "JSON Exception");
+                        }
                         Log.i(TAG, "Tweet: " + tweet.body);
                         Intent intent = new Intent();
                         intent.putExtra("tweet", Parcels.wrap(tweet));

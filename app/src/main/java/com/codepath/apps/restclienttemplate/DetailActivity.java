@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -97,15 +98,16 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
                         Log.i("Details", "Like success");
+                        liked = !liked;
+                        fixHeart();
                     }
 
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                         Log.e("Details", "Like Failure");
+                        failToast();
                     }
                 });
-                liked = !liked;
-                fixHeart();
             }
         });
         ivRT.setOnClickListener(new View.OnClickListener() {
@@ -115,19 +117,23 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
                         Log.i("Details", "Retweeted!");
+                        retweeted = !retweeted;
+                        fixRT();
                     }
 
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                         Log.e("Details", "Not Retweeted!");
+                        failToast();
                     }
                 });
-                retweeted = !retweeted;
-                fixRT();
             }
         });
     }
 
+    private void failToast(){
+        Toast.makeText(this, "Unable to do that! :(", Toast.LENGTH_SHORT).show();
+    }
     private void fixHeart(){
         if(liked){
             Glide.with(this).load(R.drawable.ic_vector_heart).into(ivHeart);

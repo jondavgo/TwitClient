@@ -61,4 +61,5 @@
         android:layout_marginBottom="10dp"
         android:contentDescription="@string/embedded_image"
         tools:srcCompat="@tools:sample/avatars" />
+
 </RelativeLayout>

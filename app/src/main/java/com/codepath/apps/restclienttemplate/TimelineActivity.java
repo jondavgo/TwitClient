@@ -39,6 +39,7 @@ public class TimelineActivity extends AppCompatActivity {
     List<Tweet> tweets;
     TweetsAdapter adapter;
     SwipeRefreshLayout swipeContainer;
+    EndlessRecyclerViewScrollListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,11 @@ public class TimelineActivity extends AppCompatActivity {
         ActivityTimelineBinding binding = ActivityTimelineBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Set up timeline
         client = TwitterApplication.getRestClient(this);
         populateHomeTimeline();
+
+        // Set up recycler view and swipe to refresh
         rvTweets = binding.rvTweets;
         tweets = new ArrayList<>();
         adapter = new TweetsAdapter(this, tweets);
@@ -67,6 +71,36 @@ public class TimelineActivity extends AppCompatActivity {
                 R.color.medium_red);
         DividerItemDecoration decoration = new DividerItemDecoration(rvTweets.getContext(), layoutManager.getOrientation());
         rvTweets.addItemDecoration(decoration);
+
+        // Set up endless scroll
+        listener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadMoreData();
+            }
+        };
+        rvTweets.addOnScrollListener(listener);
+    }
+
+    private void loadMoreData() {
+        client.getNextPageOfTweets(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "Successful scrolling!");
+                Log.i(TAG, "Success!");
+                try {
+                    adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
+                } catch (JSONException e) {
+                    Log.e(TAG, "JSON Exception!");
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.i(TAG, "Failed scrolling!", throwable);
+            }
+        }, tweets.get(tweets.size() - 1).id);
     }
 
     @Override

@@ -26,22 +26,18 @@ public class Tweet {
 
     }
 
-    public static Tweet fromJson(JSONObject object) {
+    public static Tweet fromJson(JSONObject object) throws JSONException {
         Tweet tweet = new Tweet();
-        try {
-            tweet.body = object.getString("text");
-            tweet.createdAt = object.getString("created_at");
-            tweet.user = User.fromJson(object.getJSONObject("user"));
-            tweet.time = object.getString("created_at");
-            if(object.getJSONObject("entities").has("media")) {
-                tweet.embedURL = object.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url_https");
-            } else {
-                tweet.embedURL = "";
-            }
-            tweet.id = object.getLong("id");
-        } catch(Exception e){
-            Log.i("Tweet.fromJson", "JSONException", e);
+        tweet.body = object.getString("text");
+        tweet.createdAt = object.getString("created_at");
+        tweet.user = User.fromJson(object.getJSONObject("user"));
+        tweet.time = object.getString("created_at");
+        if(object.getJSONObject("entities").has("media")) {
+            tweet.embedURL = object.getJSONObject("entities").getJSONArray("media").getJSONObject(0).getString("media_url_https");
+        } else {
+            tweet.embedURL = "";
         }
+        tweet.id = object.getLong("id");
         return tweet;
     }
 
