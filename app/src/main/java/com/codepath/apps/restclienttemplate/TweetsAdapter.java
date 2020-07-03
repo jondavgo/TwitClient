@@ -69,6 +69,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void addToStart(Tweet tweet){
+        tweets.add(0,tweet);
+        notifyItemInserted(0);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
@@ -121,7 +126,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @SuppressLint("SetTextI18n")
         @RequiresApi(api = Build.VERSION_CODES.N)
-        public void bind(final Tweet tweet) {
+        public void bind(@NonNull final Tweet tweet) {
             tvBody.setText(tweet.body);
             tvScreenName.setText(tweet.user.name);
             tvTime.setText(getRelativeTimeAgo(tweet.time));

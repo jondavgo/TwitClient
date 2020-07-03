@@ -45,6 +45,7 @@ public class TimelineActivity extends AppCompatActivity {
     SwipeRefreshLayout swipeContainer;
     EndlessRecyclerViewScrollListener listener;
     TweetDao tweetDao;
+    MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +70,9 @@ public class TimelineActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                showProgressBar();
                 fetchTimelineASync(0);
+                hideProgressBar();
             }
         });
         swipeContainer.setColorSchemeResources(R.color.twitter_blue,
@@ -93,11 +96,13 @@ public class TimelineActivity extends AppCompatActivity {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                Log.i("Dao", "Loading...");
+                showProgressBar();
+                Log.i(TAG, "Stuff loaded");
                 List<TweetWithUser> tweetWithUsers = tweetDao.recentItems();
                 List<Tweet> tweetsFromDB = TweetWithUser.getTweetList(tweetWithUsers);
                 adapter.clear();
                 adapter.addAll(tweetsFromDB);
+                hideProgressBar();
             }
         });
     }
@@ -124,6 +129,15 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -144,9 +158,9 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             Tweet tweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
-            tweets.add(0,tweet);
-            adapter.notifyItemInserted(0);
+            adapter.addToStart(tweet);
             rvTweets.smoothScrollToPosition(0);
+            Log.d(TAG, "result returned!");
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -156,7 +170,6 @@ public class TimelineActivity extends AppCompatActivity {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-
                 try {
                     adapter.clear();
                     adapter.addAll(Tweet.fromJsonArray(json.jsonArray));
@@ -177,6 +190,7 @@ public class TimelineActivity extends AppCompatActivity {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                adapter.clear();
                 Log.i(TAG, "Success!");
                 try {
                     final List<Tweet> tweetsFromNetwork = Tweet.fromJsonArray(json.jsonArray);
@@ -185,10 +199,12 @@ public class TimelineActivity extends AppCompatActivity {
                     AsyncTask.execute(new Runnable() {
                         @Override
                         public void run() {
+                            showProgressBar();
                             Log.i("Dao", "Saving...");
                             List<User> usersFromNetwork = User.fromJsonTweetArray(tweetsFromNetwork);
                             tweetDao.insertModel(usersFromNetwork.toArray(new User[0]));
                             tweetDao.insertModel(tweetsFromNetwork.toArray(new Tweet[0]));
+                            hideProgressBar();
                         }
                     });
                 } catch (JSONException e) {
@@ -202,5 +218,15 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.e(TAG, "onFailure", throwable);
             }
         });
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
     }
 }

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -59,7 +58,9 @@ public class ComposeActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             Log.e("Compose", "JSON Exception");
                         }
-                        Log.i(TAG, "Tweet: " + tweet.body);
+                        if(tweet != null) {
+                            Log.i(TAG, "Tweet: " + tweet.body);
+                        }
                         Intent intent = new Intent();
                         intent.putExtra("tweet", Parcels.wrap(tweet));
                         setResult(RESULT_OK,intent);
