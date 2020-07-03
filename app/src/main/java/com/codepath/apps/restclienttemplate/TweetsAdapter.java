@@ -1,5 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
@@ -93,6 +94,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivEmbed;
         TextView tvBody;
         TextView tvScreenName;
+        TextView tvUsername;
         TextView tvTime;
 
         public ViewHolder(@NonNull ItemTweetBinding binding) {
@@ -102,6 +104,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvScreenName = binding.tvScreenName;
             tvTime = binding.tvTime;
             ivEmbed = binding.ivEmbed;
+            tvUsername = binding.tvUsername;
             itemView.setOnClickListener(this);
         }
 
@@ -116,11 +119,13 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             }
         }
 
+        @SuppressLint("SetTextI18n")
         @RequiresApi(api = Build.VERSION_CODES.N)
         public void bind(final Tweet tweet) {
             tvBody.setText(tweet.body);
             tvScreenName.setText(tweet.user.name);
             tvTime.setText(getRelativeTimeAgo(tweet.time));
+            tvUsername.setText("@" + tweet.user.handle);
             Glide.with(context)
                     .load(tweet.user.imageURL)
                     .transform(new CircleCrop())

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,9 +37,11 @@ public class DetailActivity extends AppCompatActivity {
     TextView tvBody;
     TextView tvScreenName;
     TextView tvTime;
+    TextView tvUsername;
     ImageView ivHeart;
     ImageView ivRT;
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +52,14 @@ public class DetailActivity extends AppCompatActivity {
         tweet = Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
         ivProfileImage = binding.ivProfileImage;
         tvBody = binding.tvBody;
+        tvUsername = binding.tvUsername;
         tvScreenName = binding.tvScreenName;
         tvTime = binding.tvTime;
         ivEmbed = binding.ivEmbed;
         ivHeart = binding.ivLike;
         ivRT = binding.ivRT;
+
+        tvUsername.setText("@" + tweet.user.handle);
         tvBody.setText(tweet.body);
         tvScreenName.setText(tweet.user.name);
         tvTime.setText(TweetsAdapter.getRelativeTimeAgo(tweet.time));
