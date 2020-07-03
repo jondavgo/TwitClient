@@ -49,7 +49,6 @@ public class ComposeActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Your Tweet is too long!", Toast.LENGTH_SHORT).show();
                     return;
                 }
-//                Toast.makeText(getApplicationContext(), tweet, Toast.LENGTH_SHORT).show();
                 client.postTweet(tweetBody, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {

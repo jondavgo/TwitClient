@@ -11,7 +11,8 @@ import java.util.List;
 public interface TweetDao {
 
     @Query("SELECT Tweet.body AS tweet_body, Tweet.createdAt AS tweet_createdAt, Tweet.time AS tweet_time, " +
-            "Tweet.embedURL AS tweet_embedURL, Tweet.id AS tweet_id, User.* FROM Tweet INNER JOIN User ON Tweet.userID = User.id ORDER BY createdAt DESC LIMIT 300")
+            "Tweet.embedURL AS tweet_embedURL, Tweet.id AS tweet_id, User.* FROM Tweet INNER JOIN User " +
+            "ON Tweet.userID = User.id ORDER BY createdAt DESC LIMIT 5")
     List<TweetWithUser> recentItems();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

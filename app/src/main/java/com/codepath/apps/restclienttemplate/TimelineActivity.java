@@ -89,6 +89,7 @@ public class TimelineActivity extends AppCompatActivity {
         rvTweets.addOnScrollListener(listener);
 
         // Populate with persistence in mind
+        populateHomeTimeline();
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -99,7 +100,6 @@ public class TimelineActivity extends AppCompatActivity {
                 adapter.addAll(tweetsFromDB);
             }
         });
-        populateHomeTimeline();
     }
 
     private void loadMoreData() {
